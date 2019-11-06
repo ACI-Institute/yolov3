@@ -322,19 +322,27 @@ class LoadImagesAndLabels(Dataset):  # for training/testing
             pbar = tqdm(self.label_files, desc='Reading labels')
             nm, nf, ne, ns = 0, 0, 0, 0  # number missing, number found, number empty, number datasubset
             for i, file in enumerate(pbar):
+
                 try:
                     with open(file, 'r') as f:
                         l = np.array([x.split() for x in f.read().splitlines()], dtype=np.float32)
                 except:
-                    nm += 1  # print('missing labels for image %s' % self.img_files[i])  # file missing
+                    nm += 1
+                    #print('missing labels for image %s' % self.img_files[i])  # file missing
+                    #print(os.getcwd(), file)
+                    #exit(1)
                     continue
 
                 if l.shape[0]:
                     assert l.shape[1] == 5, '> 5 label columns: %s' % file
                     assert (l >= 0).all(), 'negative labels: %s' % file
-                    assert (l[:, 1:] <= 1).all(), 'non-normalized or out of bounds coordinate labels: %s' % file
-                    self.labels[i] = l
-                    nf += 1  # file found
+                    try:
+                      assert (l[:, 1:] <= 1).all(), 'non-normalized or out of bounds coordinate labels: %s' % file
+                      self.labels[i] = l
+                      nf += 1  # file found
+                    except Exception as e:
+                        print(e)
+                        continue
 
                     # Create subdataset (a smaller dataset)
                     if create_datasubset and ns < 1E4:
@@ -578,15 +586,15 @@ def load_mosaic(self, index):
             if x is None:  # labels not preloaded
                 with open(label_path, 'r') as f:
                     x = np.array([x.split() for x in f.read().splitlines()], dtype=np.float32)
-
+            labels = x.copy()
             if x.size > 0:
                 # Normalized xywh to pixel xyxy format
-                labels = x.copy()
                 labels[:, 1] = w * (x[:, 1] - x[:, 3] / 2) + padw
                 labels[:, 2] = h * (x[:, 2] - x[:, 4] / 2) + padh
                 labels[:, 3] = w * (x[:, 1] + x[:, 3] / 2) + padw
                 labels[:, 4] = h * (x[:, 2] + x[:, 4] / 2) + padh
-
+            else:
+                print("labels not found in file:", label_path)
             labels4.append(labels)
     if len(labels4):
         labels4 = np.concatenate(labels4, 0)
