@@ -1,6 +1,6 @@
 classes=2
-train=../../data/coco/train2017_imgs.txt
-valid=../../data/coco/train2017_imgs.txt
+train=../coco/labels/train2017_imgs.txt
+valid=../coco/labels/val2017_imgs.txt
 names=data/coco.names
 backup=backup/
 eval=coco

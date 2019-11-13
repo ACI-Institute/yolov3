@@ -3,7 +3,8 @@ FROM nvcr.io/nvidia/pytorch:19.08-py3
 
 # Install dependencies (pip or conda)
 RUN pip install -U gsutil
-# RUN pip install -U -r requirements.txt
+COPY requirements.txt .
+RUN pip install -U -r requirements.txt
 # RUN conda update -n base -c defaults conda
 # RUN conda install -y -c anaconda future numpy opencv matplotlib tqdm pillow
 # RUN conda install -y -c conda-forge scikit-image tensorboard pycocotools
@@ -36,10 +37,10 @@ WORKDIR /usr/src/app
 COPY . /usr/src/app
 
 # Copy weights
-#RUN python3 -c "from utils.google_utils import *; \
-#    gdrive_download(id='18xqvs_uwAqfTXp-LJCYLYNHBOcrwbrp0', name='weights/darknet53.conv.74'); \
-#    gdrive_download(id='1oPCHKsM2JpM-zgyepQciGli9X0MTsJCO', name='weights/yolov3-spp.weights'); \
-#    gdrive_download(id='1vFlbJ_dXPvtwaLLOu-twnjK4exdFiQ73', name='weights/yolov3-spp.pt)"
+RUN python3 -c "from utils.google_utils import *; \
+    gdrive_download(id='18xqvs_uwAqfTXp-LJCYLYNHBOcrwbrp0', name='weights/darknet53.conv.74'); \
+    gdrive_download(id='1oPCHKsM2JpM-zgyepQciGli9X0MTsJCO', name='weights/yolov3-spp.weights'); \
+    gdrive_download(id='1vFlbJ_dXPvtwaLLOu-twnjK4exdFiQ73', name='weights/yolov3-spp.pt')"
 
 
 # ---------------------------------------------------  Extras Below  ---------------------------------------------------
