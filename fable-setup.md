@@ -30,7 +30,8 @@ Running
 
 ## Pyenv
 - We usually use this on linux as an easier was to manage multiple accounts
-- This sort of worked, but for some reason pyenv couldn't be found intermittently.
+- there is a pyenv-win fork that I tried to use, but it seemed a bit buggy.
+- For some reason pyenv couldn't be found intermittently, may have been a bug in the PATH settings?
 - By default, the windows-32 versions were installed instead of the necessary amd64 versions, so these needed to be installed explicitly.
 
 ## WSL(1)
